@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { SearchIcon } from './icons';
+import type { UserProgress } from '../types';
 
 interface SurahInfo {
   id: number;
@@ -13,14 +14,16 @@ interface SurahListProps {
   onSelectSurah: (id: number) => void;
   activeSurahId: number | null;
   isLoading: boolean;
+  progress: UserProgress;
 }
 
-const SurahList: React.FC<SurahListProps> = ({ surahs, onSelectSurah, activeSurahId, isLoading }) => {
+const SurahList: React.FC<SurahListProps> = ({ surahs, onSelectSurah, activeSurahId, isLoading, progress }) => {
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredSurahs = surahs.filter(surah =>
     surah.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    surah.englishName.toLowerCase().includes(searchTerm.toLowerCase())
+    surah.englishName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    surah.id.toString().includes(searchTerm)
   );
 
   return (
@@ -44,28 +47,66 @@ const SurahList: React.FC<SurahListProps> = ({ surahs, onSelectSurah, activeSura
           <div className="text-center p-4 text-gray-500">جاري التحميل...</div>
         ) : (
           <ul>
-            {filteredSurahs.map(surah => (
-              <li key={surah.id}>
-                <button
-                  onClick={() => onSelectSurah(surah.id)}
-                  className={`w-full text-right flex items-center justify-between p-3 my-1 rounded-lg transition-all duration-200 ${
-                    activeSurahId === surah.id
-                      ? 'bg-teal-500 text-white shadow-md'
-                      : 'hover:bg-teal-100'
-                  }`}
-                >
-                  <div className="flex items-center gap-4">
-                     <span className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${activeSurahId === surah.id ? 'bg-white text-teal-600' : 'bg-teal-100 text-teal-700'}`}>
-                        {surah.id}
-                    </span>
-                    <div>
-                        <p className="font-bold">{surah.name}</p>
-                        <p className={`text-xs ${activeSurahId === surah.id ? 'text-teal-100' : 'text-gray-500'}`}>{surah.englishName}</p>
+            {filteredSurahs.map(surah => {
+              const isCompleted = progress.completedSurahs.includes(surah.id);
+              const surahProgress = progress.surahProgress[surah.id] || 0;
+              const isCurrent = progress.currentSurah === surah.id;
+              
+              return (
+                <li key={surah.id}>
+                  <button
+                    onClick={() => onSelectSurah(surah.id)}
+                    className={`w-full text-right flex items-center justify-between p-3 my-1 rounded-lg transition-all duration-200 relative overflow-hidden ${
+                      activeSurahId === surah.id
+                        ? 'bg-gradient-to-r from-teal-500 to-blue-500 text-white shadow-md'
+                        : isCompleted
+                        ? 'bg-gradient-to-r from-green-50 to-emerald-50 hover:from-green-100 hover:to-emerald-100'
+                        : 'hover:bg-teal-50'
+                    }`}
+                  >
+                    {/* Progress indicator background */}
+                    {surahProgress > 0 && !isCompleted && (
+                      <div 
+                        className="absolute top-0 left-0 h-full bg-teal-100/50 transition-all duration-300"
+                        style={{ width: `${surahProgress}%` }}
+                      />
+                    )}
+                    
+                    <div className="flex items-center gap-3 relative z-10">
+                      <span className={`flex items-center justify-center w-10 h-10 rounded-full text-sm font-bold ${
+                        activeSurahId === surah.id 
+                          ? 'bg-white text-teal-600' 
+                          : isCompleted
+                          ? 'bg-green-500 text-white'
+                          : 'bg-teal-100 text-teal-700'
+                      }`}>
+                        {isCompleted ? '✓' : surah.id}
+                      </span>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-bold">{surah.name}</p>
+                          {isCurrent && !isCompleted && (
+                            <span className="text-xs bg-orange-400 text-white px-2 py-0.5 rounded-full animate-pulse">
+                              جاري القراءة
+                            </span>
+                          )}
+                        </div>
+                        <p className={`text-xs ${
+                          activeSurahId === surah.id 
+                            ? 'text-teal-100' 
+                            : 'text-gray-500'
+                        }`}>
+                          {surah.englishName}
+                        </p>
+                      </div>
+                      {isCompleted && (
+                        <span className="text-2xl animate-bounce">⭐</span>
+                      )}
                     </div>
-                  </div>
-                </button>
-              </li>
-            ))}
+                  </button>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>
