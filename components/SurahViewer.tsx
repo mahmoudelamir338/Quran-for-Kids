@@ -195,8 +195,32 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
     if (!geminiQuestion || !activeAyahForGemini) return;
     setIsGeminiLoading(true);
     setGeminiResponse('');
+    
+    // Check if API key is available
+    const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
+    
+    if (!apiKey) {
+      setGeminiResponse(`
+        🔑 **المساعد الذكي غير مفعّل حالياً**
+        
+        للحصول على إجابات ذكية من المساعد، تحتاج إلى:
+        
+        1️⃣ الحصول على API Key مجاني من Google AI Studio
+        2️⃣ إضافته في ملف .env.local
+        
+        📖 **في الوقت الحالي:**
+        يمكنك قراءة التفسير المبسط الموجود مع كل آية، أو سؤال معلمك أو والديك! 🌟
+        
+        **سؤالك كان:** "${geminiQuestion}"
+        **الآية:** "${activeAyahForGemini.text}"
+        **التفسير المبسط:** ${activeAyahForGemini.tafsir}
+      `);
+      setIsGeminiLoading(false);
+      return;
+    }
+    
     try {
-        const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
+        const ai = new GoogleGenAI({ apiKey });
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
             contents: `الآية هي: "${activeAyahForGemini.text}".\nالتفسير المبدئي هو: "${activeAyahForGemini.tafsir}".\nسؤال الطفل هو: "${geminiQuestion}"`,
@@ -207,7 +231,7 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
         setGeminiResponse(response.text);
     } catch (error) {
         console.error("Error calling Gemini API:", error);
-        setGeminiResponse("عفواً، حدث خطأ ما. حاول مرة أخرى.");
+        setGeminiResponse("عفواً، حدث خطأ ما. تأكد من أن API Key صحيح، أو اسأل معلمك أو والديك! 🤲");
     } finally {
         setIsGeminiLoading(false);
     }
