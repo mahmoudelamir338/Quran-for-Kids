@@ -4,6 +4,7 @@ import SurahViewer from './components/SurahViewer';
 import ProgressBar from './components/ProgressBar';
 import ThemeSettings from './components/ThemeSettings';
 import AdminPage from './pages/AdminPage';
+import UserAuthModal from './components/UserAuthModal';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { getSurahList } from './services/quranService';
 import { getProgress, updateCurrentSurah } from './services/progressService';
@@ -42,17 +43,26 @@ const App: React.FC = () => {
   const [isLoadingList, setIsLoadingList] = useState(true);
   const [userProgress, setUserProgress] = useState<UserProgress>(getProgress());
   const [isAdminRoute, setIsAdminRoute] = useState(false);
+  const [isUserAuthModalOpen, setIsUserAuthModalOpen] = useState(false);
+  const [userAuthMode, setUserAuthMode] = useState<'login' | 'register'>('login');
+  const [currentUser, setCurrentUser] = useState<string | null>(null);
 
-  // Check if current route is admin
+  // Check if current route is admin and user auth
   useEffect(() => {
     const checkRoute = () => {
       const path = window.location.pathname;
       setIsAdminRoute(path === '/admin' || path.includes('/admin'));
     };
-    
+
     checkRoute();
     window.addEventListener('popstate', checkRoute);
-    
+
+    // Check if user is already logged in
+    const userPhone = localStorage.getItem('userPhone');
+    if (userPhone) {
+      setCurrentUser(userPhone);
+    }
+
     return () => window.removeEventListener('popstate', checkRoute);
   }, []);
 
@@ -85,6 +95,25 @@ const App: React.FC = () => {
     setUserProgress(getProgress());
   };
 
+  const handleUserAuthenticated = (phone: string) => {
+    setCurrentUser(phone);
+  };
+
+  const handleUserLogout = () => {
+    localStorage.removeItem('userPhone');
+    setCurrentUser(null);
+  };
+
+  const openLoginModal = () => {
+    setUserAuthMode('login');
+    setIsUserAuthModalOpen(true);
+  };
+
+  const openRegisterModal = () => {
+    setUserAuthMode('register');
+    setIsUserAuthModalOpen(true);
+  };
+
   // If admin route, show admin page
   if (isAdminRoute) {
     return <AdminPage />;
@@ -100,18 +129,48 @@ const App: React.FC = () => {
           <p className="text-gray-700 dark:text-gray-200 mt-3 text-xl font-semibold">
               رحلة ممتعة لتعلم القرآن الكريم ✨
           </p>
-          
-          {/* Admin Button */}
-          <a
-            href="/admin"
-            className="absolute top-0 left-0 bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-4 py-2 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 flex items-center gap-2 text-sm font-bold"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-            </svg>
-            لوحة التحكم
-          </a>
+
+          {/* User Auth Buttons */}
+          <div className="absolute top-0 right-0 flex gap-2">
+            {currentUser ? (
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-gray-600 dark:text-gray-300">مرحباً: {currentUser}</span>
+                <button
+                  onClick={handleUserLogout}
+                  className="bg-red-500 text-white px-3 py-1 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 text-sm font-bold"
+                >
+                  خروج
+                </button>
+              </div>
+            ) : (
+              <>
+                <button
+                  onClick={openLoginModal}
+                  className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-3 py-1 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 text-sm font-bold"
+                >
+                  تسجيل الدخول
+                </button>
+                <button
+                  onClick={openRegisterModal}
+                  className="bg-gradient-to-r from-green-500 to-emerald-500 text-white px-3 py-1 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 text-sm font-bold"
+                >
+                  إنشاء حساب
+                </button>
+              </>
+            )}
+
+            {/* Admin Button */}
+            <a
+              href="/admin"
+              className="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-3 py-1 rounded-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200 flex items-center gap-1 text-sm font-bold"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              المدير
+            </a>
+          </div>
         </header>
         
         {/* Progress Bar */}
@@ -144,6 +203,14 @@ const App: React.FC = () => {
 
         {/* Theme Settings */}
         <ThemeSettings />
+
+        {/* User Auth Modal */}
+        <UserAuthModal
+          isOpen={isUserAuthModalOpen}
+          onClose={() => setIsUserAuthModalOpen(false)}
+          onAuthenticated={handleUserAuthenticated}
+          initialMode={userAuthMode}
+        />
       </div>
     </ThemeProvider>
   );

@@ -11,8 +11,8 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ onLogin }) => {
   const [attempts, setAttempts] = useState(0);
   const [isBlocked, setIsBlocked] = useState(false);
 
-  // Hashed password (SHA-256 of "Mm@#100100200")
-  const CORRECT_PASSWORD_HASH = 'Mm@#100100200'; // In production, this should be properly hashed
+  // Admin password
+  const CORRECT_PASSWORD_HASH = '23235566';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
