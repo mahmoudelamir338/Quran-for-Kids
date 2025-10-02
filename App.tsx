@@ -17,20 +17,20 @@ interface SurahInfo {
 }
 
 const WelcomeScreen: React.FC = () => (
-    <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 rounded-2xl shadow-lg p-8 text-center">
-        <div className="bg-gradient-to-r from-teal-400 to-blue-500 p-6 rounded-full mb-6 animate-bounce">
-            <BookOpenIcon className="w-16 h-16 text-white" />
+    <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-gray-800 dark:via-emerald-900/30 dark:to-teal-900/30 rounded-3xl shadow-2xl p-8 text-center border-2 border-emerald-200 dark:border-emerald-700">
+        <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-8 rounded-full mb-8 animate-bounce shadow-xl">
+            <BookOpenIcon className="w-20 h-20 text-white" />
         </div>
-        <h2 className="text-4xl font-bold bg-gradient-to-r from-teal-600 to-blue-600 bg-clip-text text-transparent mb-4">
+        <h2 className="text-5xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-6 drop-shadow-lg">
             أهلاً بك في رحلتك القرآنية! 🌟
         </h2>
-        <p className="text-gray-600 max-w-md text-lg leading-relaxed">
+        <p className="text-gray-700 dark:text-gray-200 max-w-md text-xl leading-relaxed font-semibold">
             هيا يا صديقي، اختر سورة من القائمة على اليمين لتبدأ في استكشاف كلام الله، وتستمع للتلاوة العطرة، وتتعلم التفسير الميسر.
         </p>
-        <div className="mt-8 flex gap-4 text-4xl animate-pulse">
-            <span>📖</span>
-            <span>🎧</span>
-            <span>⭐</span>
+        <div className="mt-10 flex gap-6 text-5xl">
+            <span className="animate-bounce" style={{animationDelay: '0s'}}>📖</span>
+            <span className="animate-bounce" style={{animationDelay: '0.2s'}}>🎧</span>
+            <span className="animate-bounce" style={{animationDelay: '0.4s'}}>⭐</span>
         </div>
     </div>
 );
@@ -92,13 +92,13 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-purple-50 to-pink-100 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 p-4 md:p-8 transition-colors duration-300">
+      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-gray-900 dark:via-emerald-900 dark:to-teal-900 p-4 md:p-8 transition-colors duration-300">
          <header className="text-center mb-6">
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-teal-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-              القرآن الكريم للأطفال 📖
+          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent drop-shadow-lg">
+              هيا نقرأ 📖
           </h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-2 text-lg">
-              رحلة ممتعة لتعلم وفهم كلام الله ✨
+          <p className="text-gray-700 dark:text-gray-200 mt-3 text-xl font-semibold">
+              رحلة ممتعة لتعلم القرآن الكريم ✨
           </p>
         </header>
         
