@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import SurahList from './components/SurahList';
 import SurahViewer from './components/SurahViewer';
 import ProgressBar from './components/ProgressBar';
+import ThemeSettings from './components/ThemeSettings';
+import AdminPage from './pages/AdminPage';
+import { ThemeProvider } from './contexts/ThemeContext';
 import { getSurahList } from './services/quranService';
 import { getProgress, updateCurrentSurah } from './services/progressService';
 import { BookOpenIcon } from './components/icons';
@@ -38,6 +41,20 @@ const App: React.FC = () => {
   const [selectedSurahId, setSelectedSurahId] = useState<number | null>(null);
   const [isLoadingList, setIsLoadingList] = useState(true);
   const [userProgress, setUserProgress] = useState<UserProgress>(getProgress());
+  const [isAdminRoute, setIsAdminRoute] = useState(false);
+
+  // Check if current route is admin
+  useEffect(() => {
+    const checkRoute = () => {
+      const path = window.location.pathname;
+      setIsAdminRoute(path === '/admin' || path.includes('/admin'));
+    };
+    
+    checkRoute();
+    window.addEventListener('popstate', checkRoute);
+    
+    return () => window.removeEventListener('popstate', checkRoute);
+  }, []);
 
   useEffect(() => {
     const loadSurahs = async () => {
@@ -68,45 +85,55 @@ const App: React.FC = () => {
     setUserProgress(getProgress());
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-sky-100 via-purple-50 to-pink-100 p-4 md:p-8">
-       <header className="text-center mb-6">
-        <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-teal-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
-            القرآن الكريم للأطفال 📖
-        </h1>
-        <p className="text-gray-600 mt-2 text-lg">
-            رحلة ممتعة لتعلم وفهم كلام الله ✨
-        </p>
-      </header>
-      
-      {/* Progress Bar */}
-      <div className="max-w-7xl mx-auto mb-4">
-        <ProgressBar progress={userProgress} totalSurahs={surahs.length} />
-      </div>
+  // If admin route, show admin page
+  if (isAdminRoute) {
+    return <AdminPage />;
+  }
 
-      <main className="flex flex-col md:flex-row gap-6 max-w-7xl mx-auto" style={{ height: 'calc(100vh - 250px)' }}>
-        <aside className="w-full md:w-1/3 lg:w-1/4 h-full">
-          <SurahList
-            surahs={surahs}
-            onSelectSurah={handleSelectSurah}
-            activeSurahId={selectedSurahId}
-            isLoading={isLoadingList}
-            progress={userProgress}
-          />
-        </aside>
-        <section className="w-full md:w-2/3 lg:w-3/4 h-full">
-          {selectedSurahId ? (
-            <SurahViewer 
-              surahId={selectedSurahId} 
+  return (
+    <ThemeProvider>
+      <div className="min-h-screen bg-gradient-to-br from-sky-100 via-purple-50 to-pink-100 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900 p-4 md:p-8 transition-colors duration-300">
+         <header className="text-center mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-teal-600 via-blue-600 to-purple-600 bg-clip-text text-transparent">
+              القرآن الكريم للأطفال 📖
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2 text-lg">
+              رحلة ممتعة لتعلم وفهم كلام الله ✨
+          </p>
+        </header>
+        
+        {/* Progress Bar */}
+        <div className="max-w-7xl mx-auto mb-4">
+          <ProgressBar progress={userProgress} totalSurahs={surahs.length} />
+        </div>
+
+        <main className="flex flex-col md:flex-row gap-6 max-w-7xl mx-auto" style={{ height: 'calc(100vh - 250px)' }}>
+          <aside className="w-full md:w-1/3 lg:w-1/4 h-full">
+            <SurahList
+              surahs={surahs}
+              onSelectSurah={handleSelectSurah}
+              activeSurahId={selectedSurahId}
+              isLoading={isLoadingList}
               progress={userProgress}
-              onProgressUpdate={handleProgressUpdate}
             />
-          ) : (
-            <WelcomeScreen />
-          )}
-        </section>
-      </main>
-    </div>
+          </aside>
+          <section className="w-full md:w-2/3 lg:w-3/4 h-full">
+            {selectedSurahId ? (
+              <SurahViewer 
+                surahId={selectedSurahId} 
+                progress={userProgress}
+                onProgressUpdate={handleProgressUpdate}
+              />
+            ) : (
+              <WelcomeScreen />
+            )}
+          </section>
+        </main>
+
+        {/* Theme Settings */}
+        <ThemeSettings />
+      </div>
+    </ThemeProvider>
   );
 };
 

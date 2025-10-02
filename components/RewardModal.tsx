@@ -1,22 +1,31 @@
 import React, { useEffect, useState } from 'react';
+import { playSound, triggerConfetti } from '../utils/sounds';
 
 interface RewardModalProps {
   show: boolean;
   onClose: () => void;
   surahName: string;
   starsEarned: number;
+  soundEnabled?: boolean;
 }
 
-const RewardModal: React.FC<RewardModalProps> = ({ show, onClose, surahName, starsEarned }) => {
+const RewardModal: React.FC<RewardModalProps> = ({ show, onClose, surahName, starsEarned, soundEnabled = true }) => {
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
     if (show) {
       setAnimate(true);
+      playSound('complete', soundEnabled);
+      triggerConfetti();
+      
+      // Play star sound after a delay
+      setTimeout(() => {
+        playSound('star', soundEnabled);
+      }, 500);
     } else {
       setAnimate(false);
     }
-  }, [show]);
+  }, [show, soundEnabled]);
 
   if (!show) return null;
 
