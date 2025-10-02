@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import type { Surah, Ayah, UserProgress } from '../types';
 import { getSurahById } from '../services/quranService';
-import { PlayIcon, PauseIcon, NextIcon, PreviousIcon, BookOpenIcon, SparklesIcon, CloseIcon, PaperAirplaneIcon } from './icons';
-import { GoogleGenAI } from '@google/genai';
+import { PlayIcon, PauseIcon, NextIcon, PreviousIcon, BookOpenIcon } from './icons';
 import { completeSurah, updateSurahProgress } from '../services/progressService';
 import RewardModal from './RewardModal';
 
@@ -21,13 +20,6 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
   const [audioProgress, setAudioProgress] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
   const ayahRefs = useRef<(HTMLDivElement | null)[]>([]);
-
-  // Gemini state
-  const [showGeminiHelper, setShowGeminiHelper] = useState(false);
-  const [geminiQuestion, setGeminiQuestion] = useState('');
-  const [geminiResponse, setGeminiResponse] = useState('');
-  const [isGeminiLoading, setIsGeminiLoading] = useState(false);
-  const [activeAyahForGemini, setActiveAyahForGemini] = useState<Ayah | null>(null);
 
   // Reward state
   const [showReward, setShowReward] = useState(false);
@@ -177,66 +169,6 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
     }
   }
 
-  const openGeminiHelper = (ayah: Ayah) => {
-    setActiveAyahForGemini(ayah);
-    setGeminiQuestion(`اشرح لي هذه الآية ببساطة أكثر: "${ayah.text}"`);
-    setGeminiResponse('');
-    setShowGeminiHelper(true);
-  }
-
-  const closeGeminiHelper = () => {
-    setShowGeminiHelper(false);
-    setGeminiQuestion('');
-    setGeminiResponse('');
-    setActiveAyahForGemini(null);
-  }
-
-  const askGemini = async () => {
-    if (!geminiQuestion || !activeAyahForGemini) return;
-    setIsGeminiLoading(true);
-    setGeminiResponse('');
-    
-    // Check if API key is available
-    const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
-    
-    if (!apiKey) {
-      setGeminiResponse(`
-        🔑 **المساعد الذكي غير مفعّل حالياً**
-        
-        للحصول على إجابات ذكية من المساعد، تحتاج إلى:
-        
-        1️⃣ الحصول على API Key مجاني من Google AI Studio
-        2️⃣ إضافته في ملف .env.local
-        
-        📖 **في الوقت الحالي:**
-        يمكنك قراءة التفسير المبسط الموجود مع كل آية، أو سؤال معلمك أو والديك! 🌟
-        
-        **سؤالك كان:** "${geminiQuestion}"
-        **الآية:** "${activeAyahForGemini.text}"
-        **التفسير المبسط:** ${activeAyahForGemini.tafsir}
-      `);
-      setIsGeminiLoading(false);
-      return;
-    }
-    
-    try {
-        const ai = new GoogleGenAI({ apiKey });
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: `الآية هي: "${activeAyahForGemini.text}".\nالتفسير المبدئي هو: "${activeAyahForGemini.tafsir}".\nسؤال الطفل هو: "${geminiQuestion}"`,
-            config: {
-                systemInstruction: "أنت مساعد ذكي ولطيف للغاية، متخصص في شرح معاني القرآن الكريم للأطفال الصغار (أعمارهم بين 5 و 10 سنوات). استخدم لغة بسيطة جدًا، وكلمات سهلة، وأمثلة من حياتهم اليومية. كن صبورًا ومشجعًا. اجعل إجاباتك قصيرة ومباشرة ومركزة على السؤال.",
-            },
-        });
-        setGeminiResponse(response.text);
-    } catch (error) {
-        console.error("Error calling Gemini API:", error);
-        setGeminiResponse("عفواً، حدث خطأ ما. تأكد من أن API Key صحيح، أو اسأل معلمك أو والديك! 🤲");
-    } finally {
-        setIsGeminiLoading(false);
-    }
-  }
-
   if (isLoading) {
     return <div className="flex items-center justify-center w-full h-full text-2xl text-teal-600">...جاري تحميل السورة</div>;
   }
@@ -278,19 +210,13 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
             </p>
             {index === currentAyahIndex && (
                  <div className="mt-4 p-4 bg-yellow-50 rounded-lg border-r-4 border-yellow-400">
-                    <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-start gap-3">
-                            <BookOpenIcon className="w-8 h-8 text-yellow-500 mt-1 flex-shrink-0" />
-                            <div>
-                                <h3 className="font-bold text-yellow-800">التفسير الميسر:</h3>
-                            </div>
+                    <div className="flex items-start gap-3">
+                        <BookOpenIcon className="w-8 h-8 text-yellow-500 mt-1 flex-shrink-0" />
+                        <div>
+                            <h3 className="font-bold text-yellow-800 mb-2">التفسير الميسر:</h3>
+                            <p className="text-yellow-900">{ayah.tafsir}</p>
                         </div>
-                         <button onClick={() => openGeminiHelper(ayah)} className="flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white rounded-full text-sm font-bold shadow-lg hover:scale-105 transition-transform">
-                            <SparklesIcon className="w-4 h-4" />
-                            <span>اسأل مساعدك</span>
-                        </button>
                     </div>
-                    <p className="text-yellow-900 pr-11">{ayah.tafsir}</p>
                 </div>
             )}
           </div>
@@ -354,57 +280,6 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
         surahName={surah.name}
         starsEarned={progress.totalStars + 1}
       />
-
-       {/* Gemini Helper Modal */}
-      {showGeminiHelper && (
-        <div className="absolute inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-4 transition-opacity duration-300" 
-             onClick={closeGeminiHelper}
-             style={{ opacity: showGeminiHelper ? 1 : 0 }}>
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg flex flex-col max-h-[80vh] transform transition-transform duration-300" 
-               onClick={e => e.stopPropagation()}
-               style={{ transform: showGeminiHelper ? 'scale(1)' : 'scale(0.95)' }}>
-            <header className="p-4 border-b flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <SparklesIcon className="w-6 h-6 text-teal-500"/>
-                <h2 className="text-lg font-bold text-gray-800">مساعدك الذكي</h2>
-              </div>
-              <button onClick={closeGeminiHelper} className="text-gray-400 hover:text-gray-700">
-                <CloseIcon />
-              </button>
-            </header>
-            <main className="p-4 flex-grow overflow-y-auto space-y-4">
-               <div className="bg-gray-50 p-3 rounded-lg">
-                <p className="text-sm text-gray-500">عن الآية:</p>
-                <p className="font-bold text-gray-800">"{activeAyahForGemini?.text}"</p>
-               </div>
-               {geminiResponse && (
-                <div className="p-3 bg-teal-50 rounded-lg text-teal-900 whitespace-pre-wrap">{geminiResponse}</div>
-               )}
-               {isGeminiLoading && (
-                <div className="flex justify-center items-center p-4">
-                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-500"></div>
-                </div>
-               )}
-            </main>
-            <footer className="p-4 border-t bg-gray-50 rounded-b-2xl">
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={geminiQuestion}
-                  onChange={e => setGeminiQuestion(e.target.value)}
-                  onKeyPress={e => e.key === 'Enter' && askGemini()}
-                  placeholder="اسأل سؤالك هنا..."
-                  className="w-full px-4 py-2 border rounded-full bg-white focus:ring-2 focus:ring-teal-400 focus:outline-none"
-                  disabled={isGeminiLoading}
-                />
-                <button onClick={askGemini} disabled={isGeminiLoading} className="p-3 rounded-full bg-teal-500 text-white disabled:bg-gray-300 hover:bg-teal-600 transition-colors">
-                    <PaperAirplaneIcon className="w-5 h-5"/>
-                </button>
-              </div>
-            </footer>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
