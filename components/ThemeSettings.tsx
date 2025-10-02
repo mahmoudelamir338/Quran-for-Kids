@@ -61,7 +61,7 @@ const ThemeSettings: React.FC = () => {
           </div>
 
           {/* Sound Toggle */}
-          <div className="mb-6">
+          <div>
             <label className="flex items-center justify-between cursor-pointer">
               <span className="text-gray-700 dark:text-gray-300 font-medium">
                 {soundEnabled ? '🔊 الأصوات مفعلة' : '🔇 الأصوات معطلة'}
@@ -79,27 +79,6 @@ const ThemeSettings: React.FC = () => {
                 />
               </button>
             </label>
-          </div>
-
-          {/* Color Theme Selector */}
-          <div>
-            <p className="text-gray-700 dark:text-gray-300 font-medium mb-3">🎨 اختر اللون المفضل:</p>
-            <div className="grid grid-cols-2 gap-3">
-              {colorThemes.map((ct) => (
-                <button
-                  key={ct.name}
-                  onClick={() => setColorTheme(ct.name as any)}
-                  className={`p-3 rounded-xl transition-all duration-200 ${
-                    colorTheme === ct.name
-                      ? 'ring-4 ring-offset-2 ring-teal-400 scale-105'
-                      : 'hover:scale-105'
-                  }`}
-                >
-                  <div className={`h-8 rounded-lg bg-gradient-to-r ${ct.colors} mb-2`} />
-                  <p className="text-sm text-gray-700 dark:text-gray-300">{ct.label}</p>
-                </button>
-              ))}
-            </div>
           </div>
         </div>
       )}
