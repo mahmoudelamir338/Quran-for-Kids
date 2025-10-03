@@ -215,9 +215,12 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
   return (
     <div className="w-full h-full flex flex-col bg-white rounded-2xl shadow-lg p-6 overflow-y-auto relative">
       <audio ref={audioRef} />
-      <div className="text-center mb-6">
-        <h1 className="text-4xl font-bold text-teal-700">{surah.name}</h1>
-        <p className="text-gray-500">{surah.englishName}</p>
+      <div className="text-center mb-6 flex items-center justify-center gap-4">
+        <img src="/assets/mini-mushaf.svg" alt="مصحف" className="w-12 h-12" />
+        <div>
+          <h1 className="text-3xl font-bold text-teal-700">{surah.name}</h1>
+          <p className="text-gray-500">{surah.englishName}</p>
+        </div>
       </div>
 
       <div className="flex-grow space-y-4">
@@ -298,9 +301,9 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
                 <button 
                   onClick={togglePlayPause} 
                   aria-label="تشغيل/إيقاف"
-                  className="w-18 h-18 rounded-full bg-gradient-to-r from-var(--kid-emerald) to-var(--kid-teal) text-white flex items-center justify-center shadow-xl transform hover:scale-105 active:scale-95"
+                  className="kid-btn w-20 h-20 rounded-full flex items-center justify-center transform hover:scale-105 active:scale-95"
                 >
-                    {isPlaying ? <PauseIcon className="w-12 h-12"/> : <PlayIcon className="w-12 h-12"/>}
+                    {isPlaying ? <PauseIcon className="w-12 h-12 kid-icon"/> : <PlayIcon className="w-12 h-12 kid-icon"/>}
                 </button>
 
                 {/* Next */}

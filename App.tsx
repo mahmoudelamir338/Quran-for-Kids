@@ -13,10 +13,13 @@ interface SurahInfo {
 }
 
 const WelcomeScreen: React.FC = () => (
-    <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-gray-800 dark:via-emerald-900/30 dark:to-teal-900/30 rounded-3xl shadow-2xl p-8 text-center border-2 border-emerald-200 dark:border-emerald-700">
-        <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-8 rounded-full mb-8 animate-bounce shadow-xl">
-            <BookOpenIcon className="w-20 h-20 text-white" />
-        </div>
+  <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-gray-800 dark:via-emerald-900/30 dark:to-teal-900/30 rounded-3xl shadow-2xl p-8 text-center border-2 border-emerald-200 dark:border-emerald-700">
+    <div className="mb-6">
+      <img src="/assets/kid-reading.svg" alt="طفل يقرأ" className="w-40 h-40 mx-auto" />
+    </div>
+    <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-6 rounded-full mb-6 animate-bounce shadow-xl">
+      <BookOpenIcon className="w-16 h-16 text-white" />
+    </div>
         <h2 className="text-5xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-6 drop-shadow-lg">
             أهلاً بك في رحلتك القرآنية! 🌟
         </h2>

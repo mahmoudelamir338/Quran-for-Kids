@@ -207,3 +207,16 @@ input:focus-visible {
 .animate-sparkle {
   animation: sparkle 1.5s ease-in-out infinite;
 }
+
+/* Primary kid button style */
+.kid-btn {
+  background: linear-gradient(90deg, var(--kid-emerald), var(--kid-teal));
+  color: white;
+  padding: 12px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  box-shadow: 0 6px 18px rgba(16,185,129,0.15);
+}
+
+/* Larger icons for kid UI */
+.kid-icon { width: 28px; height: 28px; }
