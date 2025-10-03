@@ -5,6 +5,7 @@ import ThemeSettings from './components/ThemeSettings';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { getSurahList } from './services/quranService';
 import { BookOpenIcon } from './components/icons';
+import Alphabet from './components/Alphabet';
 
 interface SurahInfo {
   id: number;
@@ -36,6 +37,7 @@ const WelcomeScreen: React.FC = () => (
 
 
 const App: React.FC = () => {
+  const [showAlphabet, setShowAlphabet] = useState(false);
   const [surahs, setSurahs] = useState<SurahInfo[]>([]);
   const [selectedSurahId, setSelectedSurahId] = useState<number | null>(null);
   const [isLoadingList, setIsLoadingList] = useState(true);
@@ -66,20 +68,28 @@ const App: React.FC = () => {
           <p className="text-gray-700 dark:text-gray-200 mt-3 text-lg font-semibold">
               رحلة ممتعة لتعلم القرآن الكريم ✨
           </p>
+          <div className="mt-4 flex justify-center gap-3">
+            <button onClick={() => setShowAlphabet(true)} className="kid-btn px-4 py-2 rounded-xl">🔤 الحروف الهجائية</button>
+            <button onClick={() => setShowAlphabet(false)} className="px-4 py-2 bg-white border rounded-xl">🔙 العودة</button>
+          </div>
         </header>
 
 
         <main className="flex flex-col md:flex-row gap-6 max-w-7xl mx-auto" style={{ height: 'calc(100vh - 250px)' }}>
           <aside className="w-full md:w-1/3 lg:w-1/4 h-full">
-            <SurahList
-              surahs={surahs}
-              onSelectSurah={handleSelectSurah}
-              activeSurahId={selectedSurahId}
-              isLoading={isLoadingList}
-            />
+            {!showAlphabet && (
+              <SurahList
+                surahs={surahs}
+                onSelectSurah={handleSelectSurah}
+                activeSurahId={selectedSurahId}
+                isLoading={isLoadingList}
+              />
+            )}
           </aside>
           <section className="w-full md:w-2/3 lg:w-3/4 h-full">
-            {selectedSurahId ? (
+            {showAlphabet ? (
+              <Alphabet />
+            ) : selectedSurahId ? (
               <SurahViewer
                 surahId={selectedSurahId}
               />
