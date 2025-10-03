@@ -1,13 +1,3 @@
-import React from 'react';
-
-// Admin login removed — simplified kid-focused site (no auth)
-const AdminLogin: React.FC = () => {
-  return (
-    <div className="p-6 text-center">
-      <h2 className="text-xl font-bold">لوحة التحكم محذوفة</h2>
-      <p className="text-sm text-gray-600">تم تعطيل نظام تسجيل الدخول ليتناسب الموقع مع الأطفال.</p>
-    </div>
-  );
-};
-
+// AdminLogin removed permanently — kept placeholder for history.
+const AdminLogin = null;
 export default AdminLogin;

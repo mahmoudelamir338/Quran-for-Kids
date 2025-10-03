@@ -1,0 +1,12 @@
+import React from 'react';
+
+// User auth removed - simplified for kids. This stub preserves imports.
+const UserAuthModal: React.FC = () => {
+  return (
+    <div className="p-4 text-center">
+      <p className="text-sm text-gray-600">تم تعطيل نظام الحسابات لحماية بساطة التجربة للأطفال.</p>
+    </div>
+  );
+};
+
+export default UserAuthModal;
