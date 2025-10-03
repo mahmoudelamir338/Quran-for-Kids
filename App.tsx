@@ -4,9 +4,11 @@ import SurahViewer from './components/SurahViewer';
 import ThemeSettings from './components/ThemeSettings';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { getSurahList } from './services/quranService';
+import { getProgress } from './services/progressService';
 import { BookOpenIcon } from './components/icons';
 import Alphabet from './components/Alphabet';
 import ShortSurahs from './components/ShortSurahs';
+import type { UserProgress } from './types';
 
 interface SurahInfo {
   id: number;
@@ -43,6 +45,7 @@ const App: React.FC = () => {
   const [surahs, setSurahs] = useState<SurahInfo[]>([]);
   const [selectedSurahId, setSelectedSurahId] = useState<number | null>(null);
   const [isLoadingList, setIsLoadingList] = useState(true);
+  const [progress, setProgress] = useState<UserProgress>(getProgress());
 
   useEffect(() => {
     const loadSurahs = async () => {
@@ -56,6 +59,10 @@ const App: React.FC = () => {
 
   const handleSelectSurah = (id: number) => {
     setSelectedSurahId(id);
+    // Update current surah in progress
+    const { updateCurrentSurah } = require('./services/progressService');
+    updateCurrentSurah(id);
+    setProgress(getProgress());
   };
 
 
@@ -86,6 +93,7 @@ const App: React.FC = () => {
                 onSelectSurah={handleSelectSurah}
                 activeSurahId={selectedSurahId}
                 isLoading={isLoadingList}
+                progress={progress}
               />
             )}
           </aside>
@@ -97,6 +105,8 @@ const App: React.FC = () => {
             ) : selectedSurahId ? (
               <SurahViewer
                 surahId={selectedSurahId}
+                progress={progress}
+                onProgressUpdate={() => setProgress(getProgress())}
               />
             ) : (
               <WelcomeScreen />

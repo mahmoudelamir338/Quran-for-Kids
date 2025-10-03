@@ -17,7 +17,7 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
   const [currentAyahIndex, setCurrentAyahIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [repeatCount, setRepeatCount] = useState(1); // 1 = normal, 0 = no repeat, 3 = repeat 3 times
-  const [playbackRate, setPlaybackRate] = useState(0.85); // normal or slow (0.85), default slow for kids
+  const [playbackRate, setPlaybackRate] = useState(1); // normal or slow (0.85)
   const [currentWordIndex, setCurrentWordIndex] = useState(-1);
   const [audioProgress, setAudioProgress] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);

@@ -14,6 +14,7 @@ interface SurahListProps {
   onSelectSurah: (id: number) => void;
   activeSurahId: number | null;
   isLoading: boolean;
+  progress: UserProgress;
 }
 
 const SurahList: React.FC<SurahListProps> = ({ surahs, onSelectSurah, activeSurahId, isLoading, progress }) => {

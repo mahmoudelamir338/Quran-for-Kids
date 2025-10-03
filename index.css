@@ -133,7 +133,7 @@ input:focus-visible {
 @media screen and (max-width: 600px) {
   /* Slightly larger base for readability on small screens */
   body {
-    font-size: 16px; /* between 14-16px as requested */
+    font-size: 15px; /* between 14-16px as requested */
     line-height: 1.4;
   }
   h1 {
@@ -143,7 +143,7 @@ input:focus-visible {
     font-size: 18px;
   }
   p {
-    font-size: 16px;
+    font-size: 15px;
   }
 
   /* Bigger tappable buttons for children */
