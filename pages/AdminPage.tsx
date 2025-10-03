@@ -1,34 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import AdminLogin from '../components/AdminLogin';
-import AdminDashboard from '../components/AdminDashboard';
+import React from 'react';
 
 const AdminPage: React.FC = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    // Check if already authenticated
-    const auth = localStorage.getItem('adminAuth');
-    if (auth === 'true') {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-  };
-
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-  };
-
   return (
-    <>
-      {isAuthenticated ? (
-        <AdminDashboard onLogout={handleLogout} />
-      ) : (
-        <AdminLogin onLogin={handleLogin} />
-      )}
-    </>
+    <div className="min-h-screen flex items-center justify-center p-8">
+      <div className="text-center">
+        <h2 className="text-2xl font-bold">صفحة غير متاحة</h2>
+        <p className="text-gray-600 mt-2">تم تعطيل لوحة التحكم لتبسيط واجهة الأطفال.</p>
+      </div>
+    </div>
   );
 };
 

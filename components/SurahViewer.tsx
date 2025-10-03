@@ -16,6 +16,8 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
   const [isLoading, setIsLoading] = useState(true);
   const [currentAyahIndex, setCurrentAyahIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [repeatCount, setRepeatCount] = useState(1); // 1 = normal, 0 = no repeat, 3 = repeat 3 times
+  const [playbackRate, setPlaybackRate] = useState(1); // normal or slow (0.85)
   const [currentWordIndex, setCurrentWordIndex] = useState(-1);
   const [audioProgress, setAudioProgress] = useState(0);
   const audioRef = useRef<HTMLAudioElement>(null);
@@ -100,8 +102,27 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
       setCurrentWordIndex(wordIndex);
     };
     
+    let endCounter = 0;
     const handleAudioEnd = () => {
-      playNext();
+      endCounter += 1;
+      if (repeatCount === 3 && endCounter < 3) {
+        // replay same ayah
+        if (audio) {
+          audio.currentTime = 0;
+          audio.play().catch(() => {});
+        }
+        return;
+      }
+      endCounter = 0;
+      if (repeatCount === 0) {
+        // no repeat, move next
+        playNext();
+      } else if (repeatCount === 1) {
+        playNext();
+      } else if (repeatCount === 3) {
+        // after 3 plays move next
+        playNext();
+      }
     };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
@@ -124,7 +145,10 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
 
   useEffect(() => {
     if (isPlaying) {
-      audioRef.current?.play().catch(e => console.error("Audio play failed", e));
+      const audio = audioRef.current;
+      if (audio) {
+        audio.play().catch(e => console.error('Audio play failed', e));
+      }
     } else {
       audioRef.current?.pause();
     }
@@ -134,9 +158,10 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
       if(currentAyah && audioRef.current) {
         audioRef.current.src = currentAyah.audioUrl;
         setAudioProgress(0);
-        if(isPlaying){
-            audioRef.current.play().catch(e => console.error("Audio play failed", e));
-        }
+    audioRef.current.playbackRate = playbackRate;
+    if(isPlaying){
+      audioRef.current.play().catch(e => console.error('Audio play failed', e));
+    }
       }
   }, [currentAyah, isPlaying]);
 
@@ -144,6 +169,16 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
     if (surah && surah.ayahs.length > 0) {
       setIsPlaying(!isPlaying);
     }
+  };
+
+  const setRepeat = (count: number) => {
+    setRepeatCount(count);
+  };
+
+  const toggleSlow = () => {
+    const nextRate = playbackRate === 1 ? 0.85 : 1;
+    setPlaybackRate(nextRate);
+    if (audioRef.current) audioRef.current.playbackRate = nextRate;
   };
 
   const playPrevious = useCallback(() => {
@@ -248,26 +283,50 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
                   className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-teal-500 hover:accent-teal-600" 
                 />
             </div>
-            <div className="flex items-center justify-center gap-6">
+            <div className="flex items-center justify-center gap-4">
+                {/* Prev */}
                 <button 
                   onClick={playPrevious} 
                   disabled={currentAyahIndex === 0} 
-                  className="text-gray-600 disabled:text-gray-300 hover:text-teal-600 transition-all hover:scale-110 disabled:hover:scale-100"
+                  aria-label="السابق"
+                  className="p-3 rounded-lg bg-white shadow-md text-2xl text-gray-700 disabled:opacity-40"
                 >
                     <PreviousIcon />
                 </button>
+
+                {/* Play/Pause */}
                 <button 
                   onClick={togglePlayPause} 
-                  className="w-16 h-16 rounded-full bg-gradient-to-r from-teal-500 to-blue-500 text-white flex items-center justify-center shadow-lg hover:shadow-xl transition-all transform hover:scale-110 active:scale-95"
+                  aria-label="تشغيل/إيقاف"
+                  className="w-18 h-18 rounded-full bg-gradient-to-r from-var(--kid-emerald) to-var(--kid-teal) text-white flex items-center justify-center shadow-xl transform hover:scale-105 active:scale-95"
                 >
-                    {isPlaying ? <PauseIcon className="w-10 h-10"/> : <PlayIcon className="w-10 h-10"/>}
+                    {isPlaying ? <PauseIcon className="w-12 h-12"/> : <PlayIcon className="w-12 h-12"/>}
                 </button>
+
+                {/* Next */}
                 <button 
                   onClick={playNext} 
                   disabled={currentAyahIndex === surah.ayahs.length - 1} 
-                  className="text-gray-600 disabled:text-gray-300 hover:text-teal-600 transition-all hover:scale-110 disabled:hover:scale-100"
+                  aria-label="التالي"
+                  className="p-3 rounded-lg bg-white shadow-md text-2xl text-gray-700 disabled:opacity-40"
                 >
                     <NextIcon />
+                </button>
+            </div>
+
+            {/* Secondary controls: repeat, repeat 3x, slow */}
+            <div className="mt-3 flex items-center justify-center gap-3">
+                <button onClick={() => setRepeat(0)} className={`px-3 py-2 rounded-lg ${repeatCount===0? 'bg-yellow-300':'bg-white'} shadow-md`}>
+                  ⏹️ تكرار: لا
+                </button>
+                <button onClick={() => setRepeat(1)} className={`px-3 py-2 rounded-lg ${repeatCount===1? 'bg-yellow-300':'bg-white'} shadow-md`}>
+                  🔁 تكرار
+                </button>
+                <button onClick={() => setRepeat(3)} className={`px-3 py-2 rounded-lg ${repeatCount===3? 'bg-yellow-300':'bg-white'} shadow-md`}>
+                  🔁×3
+                </button>
+                <button onClick={toggleSlow} className={`px-3 py-2 rounded-lg ${playbackRate===0.85? 'bg-sky-200':'bg-white'} shadow-md`}>
+                  🐢 بطيء
                 </button>
             </div>
         </div>

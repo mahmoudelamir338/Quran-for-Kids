@@ -9,7 +9,7 @@
 
 **تطبيق تفاعلي وممتع لتعليم الأطفال القرآن الكريم** 🌟
 
-[🌐 Live Demo](https://quran-for-kids.vercel.app/) | [🔐 Admin Panel](https://quran-for-kids.vercel.app/admin)
+[🌐 Live Demo](https://quran-for-kids.vercel.app/)
 
 </div>
 

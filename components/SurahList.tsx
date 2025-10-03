@@ -14,7 +14,6 @@ interface SurahListProps {
   onSelectSurah: (id: number) => void;
   activeSurahId: number | null;
   isLoading: boolean;
-  progress: UserProgress;
 }
 
 const SurahList: React.FC<SurahListProps> = ({ surahs, onSelectSurah, activeSurahId, isLoading, progress }) => {
@@ -27,7 +26,7 @@ const SurahList: React.FC<SurahListProps> = ({ surahs, onSelectSurah, activeSura
   );
 
   return (
-    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-3xl shadow-2xl w-full md:w-80 flex flex-col h-full transition-colors duration-300 border-2 border-emerald-200 dark:border-emerald-700">
+    <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-3xl shadow-2xl w-full md:w-80 flex flex-col h-full transition-colors duration-300 border-2 border-emerald-200 dark:border-emerald-700 one-column-mobile">
       <div className="p-5 border-b-2 border-emerald-200 dark:border-emerald-700 sticky top-0 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-gray-800 dark:to-gray-800 rounded-t-3xl">
         <h2 className="text-xl font-bold text-emerald-700 dark:text-emerald-300 mb-3 text-center">🌟 ابدأ رحلتك القرآنية الآن!</h2>
         <div className="relative">
@@ -50,7 +49,7 @@ const SurahList: React.FC<SurahListProps> = ({ surahs, onSelectSurah, activeSura
             جاري التحميل...
           </div>
         ) : (
-          <ul>
+          <ul className="space-y-1">
             {filteredSurahs.map(surah => {
               const isCompleted = progress.completedSurahs.includes(surah.id);
               const surahProgress = progress.surahProgress[surah.id] || 0;
@@ -60,7 +59,7 @@ const SurahList: React.FC<SurahListProps> = ({ surahs, onSelectSurah, activeSura
                 <li key={surah.id}>
                   <button
                     onClick={() => onSelectSurah(surah.id)}
-                    className={`w-full text-right flex items-center justify-between p-4 my-2 rounded-xl transition-all duration-200 relative overflow-hidden transform hover:scale-105 hover:shadow-lg ${
+                    className={`w-full text-right flex items-center justify-between p-4 my-2 rounded-xl transition-all duration-200 relative overflow-hidden transform ${
                       activeSurahId === surah.id
                         ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-xl scale-105 border-2 border-emerald-300'
                         : isCompleted
