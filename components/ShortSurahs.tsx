@@ -16,7 +16,7 @@ const ShortSurahs: React.FC<ShortSurahsProps> = ({ onSelect }) => {
   return (
     <div className="p-6 max-w-4xl mx-auto islamic-card rounded-2xl">
       <h2 className="text-xl md:text-2xl font-bold text-center mb-4 text-emerald-800 islamic-glow">🕌 قصار السور المباركة</h2>
-      <p className="text-center text-gray-700 mb-6">اختر إحدى السور القصيرة للاستماع والتكرار مع التفسير الميسر بالعامية المصرية</p>
+      <p className="text-center text-gray-700 mb-6">اختر إحدى السور القصيرة للاستماع والتكرار</p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {SHORT_SURAH_LIST.map(s => (

@@ -28,7 +28,7 @@ const WelcomeScreen: React.FC = () => (
             أهلاً وسهلاً في رحلتك القرآنية المباركة! 🌟
         </h2>
         <p className="text-gray-700 dark:text-gray-200 max-w-lg text-base md:text-lg leading-relaxed font-semibold">
-            هيا يا بني، اختر سورة مباركة من القائمة لتبدأ في استكشاف كلام الله العزيز، وتستمع للتلاوة العطرة بصوت الشيخ المنشاوي، وتتعلم التفسير الميسر بالعامية المصرية الطيبة.
+            هيا يا بني، اختر سورة مباركة من القائمة لتبدأ في استكشاف كلام الله العزيز، وتستمع للتلاوة العطرة بصوت الشيخ المنشاوي.
         </p>
         <div className="mt-10 flex gap-6 text-5xl">
             <span className="animate-bounce" style={{animationDelay: '0s'}}>📖</span>
@@ -40,8 +40,6 @@ const WelcomeScreen: React.FC = () => (
 
 
 const App: React.FC = () => {
-  const [showAlphabet, setShowAlphabet] = useState(false);
-  const [showShortSurahs, setShowShortSurahs] = useState(false);
   const [surahs, setSurahs] = useState<SurahInfo[]>([]);
   const [selectedSurahId, setSelectedSurahId] = useState<number | null>(null);
   const [isLoadingList, setIsLoadingList] = useState(true);
@@ -75,34 +73,26 @@ const App: React.FC = () => {
               هيا نقرأ القرآن الكريم 📖
           </h1>
           <p className="text-gray-700 dark:text-gray-200 mt-3 text-base md:text-lg font-semibold">
-              رحلة مباركة لتعلم كلام الله بالعامية المصرية ✨
+              رحلة مباركة لتعلم كلام الله ✨
           </p>
-          <div className="mt-4 flex flex-wrap justify-center gap-3">
-            <button onClick={() => setShowAlphabet(true)} className="kid-btn px-4 py-2 rounded-xl text-sm md:text-base">🔤 الحروف الهجائية</button>
-            <button onClick={() => { setShowShortSurahs(true); setShowAlphabet(false); }} className="kid-btn px-4 py-2 rounded-xl text-sm md:text-base">🕌 قصار السور</button>
-            <button onClick={() => { setShowAlphabet(false); setShowShortSurahs(false); }} className="px-4 py-2 bg-white dark:bg-gray-700 border-2 border-emerald-300 dark:border-emerald-600 rounded-xl text-sm md:text-base hover:bg-emerald-50 dark:hover:bg-gray-600 transition-colors">🔙 العودة للسور</button>
+          <div className="mt-4 text-center">
+            <p className="text-emerald-700 dark:text-emerald-300 text-sm">اختر سورة واستمع للتلاوة المباركة</p>
           </div>
         </header>
 
 
-        <main className="flex flex-col md:flex-row gap-6 max-w-7xl mx-auto" style={{ height: 'calc(100vh - 250px)' }}>
+        <main className="flex flex-col md:flex-row gap-6 max-w-7xl mx-auto" style={{ height: 'calc(100vh - 200px)' }}>
           <aside className="w-full md:w-1/3 lg:w-1/4 h-full">
-            {!showAlphabet && (
-              <SurahList
-                surahs={surahs}
-                onSelectSurah={handleSelectSurah}
-                activeSurahId={selectedSurahId}
-                isLoading={isLoadingList}
-                progress={progress}
-              />
-            )}
+            <SurahList
+              surahs={surahs}
+              onSelectSurah={handleSelectSurah}
+              activeSurahId={selectedSurahId}
+              isLoading={isLoadingList}
+              progress={progress}
+            />
           </aside>
           <section className="w-full md:w-2/3 lg:w-3/4 h-full">
-            {showAlphabet ? (
-              <Alphabet />
-            ) : showShortSurahs ? (
-              <ShortSurahs onSelect={(id)=>{ setSelectedSurahId(id); setShowShortSurahs(false); }} />
-            ) : selectedSurahId ? (
+            {selectedSurahId ? (
               <SurahViewer
                 surahId={selectedSurahId}
                 progress={progress}
@@ -116,6 +106,14 @@ const App: React.FC = () => {
 
         {/* Theme Settings */}
         <ThemeSettings />
+
+        {/* Footer with fixed message */}
+        <footer className="mt-8 text-center">
+          <p className="text-sm text-gray-600 dark:text-gray-400 font-light">
+            صدقة جارية لمن صمم هذا الموقع<br />
+            لا تنسوني بصالح الدعاء
+          </p>
+        </footer>
       </div>
     </ThemeProvider>
   );

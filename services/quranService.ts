@@ -150,7 +150,7 @@ async function fetchSurahFromAPI(surahNumber: number): Promise<Surah | null> {
           // استخدام صوت الشيخ المنشاوي المعلم (Minshawy_Murattal)
           audioUrl: `https://everyayah.com/data/Minshawy_Murattal_128kbps/${surahNum}${ayahNum}.mp3`,
           words: [],
-          // استخدام التفسير بالعامية المصرية
+          // استخدام التفسير المبسط
           tafsir: getTafsir(surahData.number, ayah.numberInSurah)
         };
       })
