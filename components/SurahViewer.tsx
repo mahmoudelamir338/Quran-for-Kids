@@ -213,13 +213,13 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
   }
 
   return (
-    <div className="w-full h-full flex flex-col bg-white rounded-2xl shadow-lg p-6 overflow-y-auto relative">
+    <div className="w-full h-full flex flex-col islamic-card rounded-2xl shadow-lg p-6 overflow-y-auto relative">
       <audio ref={audioRef} />
       <div className="text-center mb-6 flex items-center justify-center gap-4">
         <img src="/assets/mini-mushaf.svg" alt="مصحف" className="w-12 h-12" />
-        <div>
-          <h1 className="text-3xl font-bold text-teal-700">{surah.name}</h1>
-          <p className="text-gray-500">{surah.englishName}</p>
+        <div class="text-center">
+          <h1 className="text-2xl md:text-3xl font-bold text-emerald-800 islamic-glow">{surah.name}</h1>
+          <p className="text-gray-600 text-sm md:text-base">{surah.englishName}</p>
         </div>
       </div>
 
@@ -228,7 +228,7 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
           <div key={ayah.id} 
                ref={(el) => { ayahRefs.current[index] = el; }}
                onClick={() => selectAyah(index)} 
-               className={`p-4 rounded-xl cursor-pointer transition-all duration-300 ${index === currentAyahIndex ? 'bg-teal-50 border-r-4 border-teal-500' : 'bg-gray-50 hover:bg-teal-50'}`}>
+               className={`p-4 rounded-xl cursor-pointer transition-all duration-300 ${index === currentAyahIndex ? 'bg-gradient-to-r from-emerald-50 to-amber-50 border-r-4 border-emerald-600 islamic-border' : 'bg-gray-50 hover:bg-gradient-to-r hover:from-emerald-50 hover:to-amber-50 hover:border-r-2 hover:border-emerald-400'}`}>
             <p className="text-3xl leading-relaxed text-right font-quranic" dir="rtl">
               {ayah.words.length > 0 ? (
                 ayah.words.map((word, wordIdx) => (
@@ -244,15 +244,15 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
               ) : (
                 <span className={index === currentAyahIndex && isPlaying ? 'text-orange-500' : 'text-gray-800'}>{ayah.text}</span>
               )}
-               <span className="text-xl text-teal-500 font-bold mx-2">({ayah.id})</span>
+               <span className="text-lg text-emerald-700 font-bold mx-2 bg-gradient-to-r from-emerald-600 to-amber-600 bg-clip-text text-transparent">({ayah.id})</span>
             </p>
             {index === currentAyahIndex && (
-                 <div className="mt-4 p-4 bg-yellow-50 rounded-lg border-r-4 border-yellow-400">
+                 <div className="mt-4 p-4 bg-gradient-to-r from-amber-50 to-yellow-50 rounded-lg border-r-4 border-amber-500 islamic-border">
                     <div className="flex items-start gap-3">
-                        <BookOpenIcon className="w-8 h-8 text-yellow-500 mt-1 flex-shrink-0" />
+                        <BookOpenIcon className="w-8 h-8 text-amber-600 mt-1 flex-shrink-0" />
                         <div>
-                            <h3 className="font-bold text-yellow-800 mb-2">التفسير الميسر:</h3>
-                            <p className="text-yellow-900">{ayah.tafsir}</p>
+                            <h3 className="font-bold text-amber-800 mb-2 islamic-glow">التفسير الميسر بالعامية المصرية:</h3>
+                            <p className="text-amber-900 leading-relaxed">{ayah.tafsir}</p>
                         </div>
                     </div>
                 </div>
@@ -261,16 +261,16 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
         ))}
       </div>
         {/* Player Controls */}
-      <div className="mt-6 sticky bottom-0 bg-gradient-to-r from-teal-50 via-blue-50 to-purple-50 backdrop-blur-sm p-4 rounded-b-2xl z-10 shadow-lg">
+      <div className="mt-6 sticky bottom-0 bg-gradient-to-r from-emerald-50 via-amber-50 to-yellow-50 backdrop-blur-sm p-4 rounded-b-2xl z-10 shadow-lg islamic-border">
         <div className="w-full max-w-md mx-auto">
             {/* Progress info */}
             <div className="flex items-center justify-between mb-2 text-sm">
-              <span className="text-gray-600">
+              <span className="text-emerald-700 font-semibold">
                 الآية {currentAyahIndex + 1} من {surah.ayahs.length}
               </span>
               <div className="flex items-center gap-2">
                 {completedAyahs.size > 0 && (
-                  <span className="text-green-600 font-bold">
+                  <span className="text-emerald-800 font-bold islamic-glow">
                     ✓ {completedAyahs.size} آية مكتملة
                   </span>
                 )}
@@ -283,7 +283,7 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
                   max="100" 
                   value={audioProgress} 
                   onChange={handleSeek} 
-                  className="w-full h-3 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-teal-500 hover:accent-teal-600" 
+                  className="w-full h-3 bg-gradient-to-r from-emerald-200 to-amber-200 rounded-lg appearance-none cursor-pointer accent-emerald-600 hover:accent-emerald-700"
                 />
             </div>
             <div className="flex items-center justify-center gap-4">
@@ -319,16 +319,16 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
 
             {/* Secondary controls: repeat, repeat 3x, slow */}
             <div className="mt-3 flex items-center justify-center gap-3">
-                <button onClick={() => setRepeat(0)} className={`px-3 py-2 rounded-lg ${repeatCount===0? 'bg-yellow-300':'bg-white'} shadow-md`}>
+                <button onClick={() => setRepeat(0)} className={`px-3 py-2 rounded-lg ${repeatCount===0? 'bg-gradient-to-r from-amber-400 to-yellow-400 text-amber-900':'bg-white hover:bg-gradient-to-r hover:from-amber-50 hover:to-yellow-50'} shadow-md transition-all duration-200`}>
                   ⏹️ تكرار: لا
                 </button>
-                <button onClick={() => setRepeat(1)} className={`px-3 py-2 rounded-lg ${repeatCount===1? 'bg-yellow-300':'bg-white'} shadow-md`}>
+                <button onClick={() => setRepeat(1)} className={`px-3 py-2 rounded-lg ${repeatCount===1? 'bg-gradient-to-r from-amber-400 to-yellow-400 text-amber-900':'bg-white hover:bg-gradient-to-r hover:from-amber-50 hover:to-yellow-50'} shadow-md transition-all duration-200`}>
                   🔁 تكرار
                 </button>
-                <button onClick={() => setRepeat(3)} className={`px-3 py-2 rounded-lg ${repeatCount===3? 'bg-yellow-300':'bg-white'} shadow-md`}>
+                <button onClick={() => setRepeat(3)} className={`px-3 py-2 rounded-lg ${repeatCount===3? 'bg-gradient-to-r from-amber-400 to-yellow-400 text-amber-900':'bg-white hover:bg-gradient-to-r hover:from-amber-50 hover:to-yellow-50'} shadow-md transition-all duration-200`}>
                   🔁×3
                 </button>
-                <button onClick={toggleSlow} className={`px-3 py-2 rounded-lg ${playbackRate===0.85? 'bg-sky-200':'bg-white'} shadow-md`}>
+                <button onClick={toggleSlow} className={`px-3 py-2 rounded-lg ${playbackRate===0.85? 'bg-gradient-to-r from-emerald-300 to-teal-300 text-emerald-900':'bg-white hover:bg-gradient-to-r hover:from-emerald-50 hover:to-teal-50'} shadow-md transition-all duration-200`}>
                   🐢 بطيء
                 </button>
             </div>

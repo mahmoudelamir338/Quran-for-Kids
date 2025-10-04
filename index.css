@@ -41,12 +41,14 @@
   border-color: rgb(75 85 99); /* gray-600 */
 }
 
-/* Kid-friendly color variables */
+/* Islamic Classic color variables */
 :root {
-  --kid-emerald: #10b981; /* green */
-  --kid-teal: #06b6d4; /* teal/cyan */
-  --kid-sky: #7dd3fc; /* sky */
-  --kid-soft-yellow: #fef08a; /* soft yellow */
+  --islamic-green: #2d5a27; /* dark green */
+  --islamic-gold: #d4af37; /* gold */
+  --islamic-brown: #8b4513; /* warm brown */
+  --islamic-cream: #f5f5dc; /* cream */
+  --islamic-dark: #1a1a1a; /* dark */
+  --islamic-light: #f8f8f8; /* light */
 }
 
 /* Slide up animation */
@@ -143,17 +145,17 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #14b8a6, #0891b2);
+  background: linear-gradient(to bottom, var(--islamic-green), var(--islamic-gold));
   border-radius: 10px;
-  border: 2px solid #f1f1f1;
+  border: 2px solid var(--islamic-cream);
 }
 
 .dark ::-webkit-scrollbar-thumb {
-  border-color: #374151;
+  border-color: var(--islamic-dark);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #0d9488, #0e7490);
+  background: linear-gradient(to bottom, var(--islamic-brown), var(--islamic-gold));
   transform: scale(1.1);
 }
 
@@ -298,15 +300,50 @@ input:focus-visible {
   animation: pulse-kid 1.5s ease-in-out infinite;
 }
 
-/* Primary kid button style */
+/* Islamic Classic Background Patterns */
+.islamic-bg {
+  background: linear-gradient(135deg, var(--islamic-cream) 0%, #f0f0e0 100%);
+  background-image:
+    radial-gradient(circle at 25% 25%, rgba(212,175,55,0.1) 0%, transparent 50%),
+    radial-gradient(circle at 75% 75%, rgba(45,90,39,0.1) 0%, transparent 50%);
+}
+
+.dark .islamic-bg {
+  background: linear-gradient(135deg, var(--islamic-dark) 0%, #2a2a2a 100%);
+}
+
+/* Islamic border styles */
+.islamic-border {
+  border: 2px solid var(--islamic-gold);
+  box-shadow: inset 0 0 10px rgba(212,175,55,0.1);
+}
+
+/* Islamic text glow */
+.islamic-glow {
+  text-shadow: 0 0 10px rgba(212,175,55,0.3);
+}
+
+/* Islamic card style */
+.islamic-card {
+  background: linear-gradient(145deg, #ffffff, var(--islamic-cream));
+  border: 2px solid var(--islamic-gold);
+  box-shadow: 0 8px 25px rgba(45,90,39,0.15);
+}
+
+.dark .islamic-card {
+  background: linear-gradient(145deg, var(--islamic-dark), #2a2a2a);
+  border: 2px solid var(--islamic-gold);
+}
+
+/* Islamic Classic button style */
 .kid-btn {
-  background: linear-gradient(90deg, var(--kid-emerald), var(--kid-teal));
+  background: linear-gradient(135deg, var(--islamic-green), var(--islamic-gold));
   color: white;
   padding: 12px 18px;
-  border-radius: 12px;
+  border-radius: 8px;
   font-weight: 700;
-  box-shadow: 0 6px 18px rgba(16,185,129,0.15);
-  border: none;
+  box-shadow: 0 4px 12px rgba(45,90,39,0.3);
+  border: 2px solid var(--islamic-gold);
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;

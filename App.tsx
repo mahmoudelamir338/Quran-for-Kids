@@ -17,18 +17,18 @@ interface SurahInfo {
 }
 
 const WelcomeScreen: React.FC = () => (
-  <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-gray-800 dark:via-emerald-900/30 dark:to-teal-900/30 rounded-3xl shadow-2xl p-8 text-center border-2 border-emerald-200 dark:border-emerald-700">
+  <div className="flex flex-col items-center justify-center w-full h-full islamic-card rounded-3xl shadow-2xl p-8 text-center">
     <div className="mb-6">
       <img src="/assets/kid-reading.svg" alt="طفل يقرأ" className="w-40 h-40 mx-auto" />
     </div>
     <div className="bg-gradient-to-r from-emerald-500 to-teal-500 p-6 rounded-full mb-6 animate-bounce shadow-xl">
       <BookOpenIcon className="w-16 h-16 text-white" />
     </div>
-        <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent mb-6 drop-shadow-lg">
-            أهلاً بك في رحلتك القرآنية! 🌟
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-emerald-700 via-green-600 to-emerald-800 bg-clip-text text-transparent islamic-glow mb-6">
+            أهلاً وسهلاً في رحلتك القرآنية المباركة! 🌟
         </h2>
-        <p className="text-gray-700 dark:text-gray-200 max-w-lg text-lg md:text-xl leading-relaxed font-semibold">
-            هيا يا صديقي، اختر سورة من القائمة على اليمين لتبدأ في استكشاف كلام الله، وتستمع للتلاوة العطرة، وتتعلم التفسير الميسر بالعامية المصرية.
+        <p className="text-gray-700 dark:text-gray-200 max-w-lg text-base md:text-lg leading-relaxed font-semibold">
+            هيا يا بني، اختر سورة مباركة من القائمة لتبدأ في استكشاف كلام الله العزيز، وتستمع للتلاوة العطرة بصوت الشيخ المنشاوي، وتتعلم التفسير الميسر بالعامية المصرية الطيبة.
         </p>
         <div className="mt-10 flex gap-6 text-5xl">
             <span className="animate-bounce" style={{animationDelay: '0s'}}>📖</span>
@@ -69,13 +69,13 @@ const App: React.FC = () => {
 
   return (
     <ThemeProvider>
-      <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 dark:from-gray-900 dark:via-emerald-900 dark:to-teal-900 p-4 md:p-8 transition-colors duration-300">
-         <header className="text-center mb-6">
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-green-600 via-emerald-600 to-teal-600 bg-clip-text text-transparent drop-shadow-lg">
-              هيا نقرأ 📖
+      <div className="min-h-screen islamic-bg p-4 md:p-8 transition-colors duration-300">
+         <header className="text-center mb-6 islamic-card p-6 rounded-2xl">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-emerald-700 via-green-600 to-emerald-800 bg-clip-text text-transparent islamic-glow">
+              هيا نقرأ القرآن الكريم 📖
           </h1>
           <p className="text-gray-700 dark:text-gray-200 mt-3 text-base md:text-lg font-semibold">
-              رحلة ممتعة لتعلم القرآن الكريم بالعامية المصرية ✨
+              رحلة مباركة لتعلم كلام الله بالعامية المصرية ✨
           </p>
           <div className="mt-4 flex flex-wrap justify-center gap-3">
             <button onClick={() => setShowAlphabet(true)} className="kid-btn px-4 py-2 rounded-xl text-sm md:text-base">🔤 الحروف الهجائية</button>
