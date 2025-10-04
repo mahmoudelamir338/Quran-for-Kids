@@ -29,7 +29,7 @@ const SurahList: React.FC<SurahListProps> = ({ surahs, onSelectSurah, activeSura
   return (
     <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg rounded-3xl shadow-2xl w-full md:w-80 flex flex-col h-full transition-colors duration-300 border-2 border-emerald-200 dark:border-emerald-700 one-column-mobile">
       <div className="p-5 border-b-2 border-emerald-200 dark:border-emerald-700 sticky top-0 bg-gradient-to-r from-emerald-50 to-teal-50 dark:from-gray-800 dark:to-gray-800 rounded-t-3xl">
-        <h2 className="text-xl font-bold text-emerald-700 dark:text-emerald-300 mb-3 text-center">🌟 ابدأ رحلتك القرآنية الآن!</h2>
+        <h2 className="text-lg md:text-xl font-bold text-emerald-700 dark:text-emerald-300 mb-3 text-center">🌟 ابدأ رحلتك القرآنية الآن!</h2>
         <div className="relative">
           <input
             type="text"
@@ -46,7 +46,7 @@ const SurahList: React.FC<SurahListProps> = ({ surahs, onSelectSurah, activeSura
       <div className="overflow-y-auto flex-grow p-2">
         {isLoading ? (
           <div className="text-center p-4 text-gray-500 dark:text-gray-400">
-            <div className="animate-spin text-4xl mb-2">⏳</div>
+            <div className="animate-spin text-3xl md:text-4xl mb-2">⏳</div>
             جاري التحميل...
           </div>
         ) : (

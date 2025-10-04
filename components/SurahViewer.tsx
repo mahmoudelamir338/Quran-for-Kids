@@ -205,11 +205,11 @@ const SurahViewer: React.FC<SurahViewerProps> = ({ surahId, progress, onProgress
   }
 
   if (isLoading) {
-    return <div className="flex items-center justify-center w-full h-full text-2xl text-teal-600">...جاري تحميل السورة</div>;
+    return <div className="flex items-center justify-center w-full h-full text-xl md:text-2xl text-teal-600">⏳ جاري تحميل السورة...</div>;
   }
 
   if (!surah) {
-    return <div className="flex items-center justify-center w-full h-full text-2xl text-red-500">لم يتم العثور على السورة</div>;
+    return <div className="flex items-center justify-center w-full h-full text-xl md:text-2xl text-red-500">❌ لم يتم العثور على السورة</div>;
   }
 
   return (
